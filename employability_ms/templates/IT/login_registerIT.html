@@ -124,6 +124,66 @@
 				<input type="text" name="last_name" placeholder="last name" required autocomplete="off">
 				<input type="number" name="contact_number" placeholder="contact number" required>
 				<input type="email" name="email" placeholder="email" required>
+				<div>
+					{% with messages = get_flashed_messages(with_categories=true) %}
+						{% if messages %}
+							{% for category, message in messages %}
+								{% if category == 'success_register' %}
+									<div class="">
+										<div class="">
+											<div class="">
+												<div style="padding: 10%; color: rgb(47, 241, 47);  font-size: 25px; font-weight: 700">
+													<center>
+														{{ message }}
+													</center>
+													<script>
+														window.setTimeout(function () {
+															window.location.reload();
+														  }, 3000);
+													</script>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% elif category == 'error' %}
+									<div class="">
+										<div class="">
+											<div class="">
+												<div style="padding: 10%; color: rgb(180, 29, 29); font-size: 25px; font-weight: 700">
+													<center>
+														{{ message }}
+													</center>
+													<script>
+														window.setTimeout(function () {
+															window.location.reload();	
+														}, 3000);
+													</script>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% else %}
+									<div class="info">
+										<div class="">
+											<div class="">
+												<div style="padding: 10%; color: rgb(47, 241, 47); font-size: 25px; font-weight: 700">
+													<center>
+														{{ message }}
+													</center>
+													<script>
+														window.setTimeout(function () {
+															window.location.reload();
+														  }, 3000);
+													</script>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
+				</div>
 				<input type="password" name="password" placeholder="password" required>
 				<select type="text" name="desired_career" id="drop-down" placeholder="Select career" required="">
 					<option value="">Desired career</option>
@@ -132,6 +192,7 @@
 					<option value="Academician">Academician</option>
 				</select>
 				<input type="text" name="department" placeholder="Department" value="Information Technology" readonly>
+				
 				<center>
 					<div>
 						<a href="/" style="display: inline-block; color: white; padding: 0; margin: 0">Home</a>
@@ -142,66 +203,7 @@
 		</div>
 
 		<div class="login">
-			<div>
-				{% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-						{% for category, message in messages %}
-							{% if category == 'success_register' %}
-								<div class="">
-									<div class="">
-										<div class="">
-											<div style="padding-top: 10%; color: green; font-size: 25px; font-weight: 700">
-												<center>
-													{{ message }}
-												</center>
-												<script>
-													window.setTimeout(function () {
-														window.location.reload();
-													  }, 3000);
-												</script>
-											</div>
-										</div>
-									</div>
-								</div>
-							{% elif category == 'error' %}
-								<div class="">
-									<div class="">
-										<div class="">
-											<div style="padding-top: 10%; color: red; font-size: 25px; font-weight: 700">
-												<center>
-													{{ message }}
-												</center>
-												<script>
-													window.setTimeout(function () {
-														window.location.reload();	
-													}, 3000);
-												</script>
-											</div>
-										</div>
-									</div>
-								</div>
-							{% else %}
-								<div class="info">
-									<div class="">
-										<div class="">
-											<div style="padding-top: 10%; color: green; font-size: 25px; font-weight: 700">
-												<center>
-													{{ message }}
-												</center>
-												<script>
-													window.setTimeout(function () {
-														window.location.reload();
-													  }, 3000);
-												</script>
-											</div>
-										</div>
-									</div>
-								</div>
-							{% endif %}
-						{% endfor %}
-					{% endif %}
-				{% endwith %}
-			</div>
+			
 			<form action="{{ url_for('_route_it.login_IT') }}" method="POST">
 				<label for="chk" aria-hidden="true" class="LoginLabel">Login</label>
 				<input type="email" name="email" placeholder="Email" required="">

@@ -23,15 +23,17 @@
                 <div style="display: inline-block">
                   <ul class="notification-drop">
                     <li class="item">
-                      <i class="fa fa-bell" aria-hidden="true" style="color: white;"></i> <span class="btn__badge pulse-button ">4</span>     
+                      <i class="fa fa-bell" aria-hidden="true" style="color: white;"></i> <span class="btn__badge pulse-button ">{{ count_unapprove }}</span>     
                       <ul style="background-color: #294f0f; border-radius: 5px">
-                        {% if students_record %}
-                          {% for user, pred_results in students_record.items %}
+                        {% if unapprove_account %}
+                          {% for unapprove in unapprove_account %}
 
-                            <li style="font-size: small; color: white">{{ user.first_name }} {{ user.middle_name }} {{ user.last_name }} {{ user.department }}
+                            <li style="font-size: small; color: white">{{ unapprove.first_name }} {{ unapprove.middle_name }} {{ unapprove.last_name }} {{ unapprove.department }}
                               <div style="display: inline-block">
-                                <form action="/delete_results" method="POST">
-                                  <input type="hidden" name="user_id" value="{{ pred_results.result_id }}">
+                                <form action="/approve_account" method="POST">
+                                  <input type="hidden" name="user_id" value="{{ unapprove.id }}">
+                                  <input type="hidden" name="user_email" value="{{ unapprove.email }}">
+                                  <input type="hidden" name="user_department" value="{{ unapprove.department }}">
                                   <button type="submit"> Approve </button>
                                 </form>
                               </div>
@@ -42,11 +44,23 @@
                     </li>
                   </ul>
                 </div>
-                <a href="/logout" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</h2></a>
+                <a href="/register_faculty" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-registered" aria-hidden="true"></i> Register Faculty</h2></a>
+                <a href="/logout" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Logout</h2></a>
             </div>
         </div>
         <!-- HERO SECTION -->
         <hr>
+        <div style="position: absolute; right: 15%; bottom: 68%" >
+          <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+            <input type="search" value="" name="search" placeholder="Enter first name, last name, etc.">
+            <button type="submit">Search</button>
+        </form>
+          <select type="text" name="department  " id="drop-down" placeholder="Department" required="">
+            <option value="">Department</option>
+            <option value="information technology">Information Technology</option>
+            <option value="computer science">Computer Science</option>
+          </select>
+        </div>
         <div class="hero">
             <table>
               <thead>
@@ -95,6 +109,21 @@
                 {% endif %}
               </tbody>
             </table>
+            <div class="" style="border-color: #294f0f; color: white">
+              {% if students_record %}
+                  {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                      {% if page_num  %}
+                          {% if students_record.page == page_num  %}
+                              <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                          {% else %}
+                              <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                          {% endif %}
+                      {% else %}
+                          ...
+                      {% endif %}
+                  {% endfor %}
+              {% endif %}
+          </div>
         </div>
         <hr>
         
@@ -220,6 +249,19 @@ a{
   position: relative;
   left: 95%;
   text-decoration: none;
+}
+input {
+  border: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #f2f2f2;
+  padding: var(--field-padding);
+  border-radius: 3px;
+  width: 300px;
+  outline: none;
+  font-size: 14px;
 }
 .btn{
   background-color: transparent;
@@ -514,7 +556,7 @@ box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 10% 10% 20% 10%;
+  padding: 5% 10% 5% 10%;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -6,8 +6,11 @@ from flask_login import LoginManager
 from flask_marshmallow import Marshmallow
 from datetime import timedelta
 
+from flask_mail import Mail
+
 db = SQLAlchemy()
 marsh = Marshmallow()
+mail = Mail()
 app = Flask(__name__)
 DB_NAME = "database.db"
 conn = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASENAME)
@@ -20,6 +23,13 @@ def create_app():
     # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     # app.config['SQLALCHEMY_POOL_RECYCLE'] = 100
     # app.config['SQLALCHEMY_POOL_TIMEOUT'] = 600
+
+    app.config['MAIL_SERVER']='mail.wetechsupport.online'
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USERNAME'] = 'support@wetechsupport.online'
+    app.config['MAIL_PASSWORD'] = 'superadmin2022'
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
 
     # db = SQLAlchemy(app)
     db.init_app(app)
@@ -42,6 +52,7 @@ def create_app():
     login_manager = LoginManager()
     login_manager.login_view = '_auth.index'
     login_manager.init_app(app)
+    mail.init_app(app)
 
     login_manager.refresh_view = 'index'
     login_manager.needs_refresh_message = (u"Session timed out, please re-login")
